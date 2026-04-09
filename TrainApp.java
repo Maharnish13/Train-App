@@ -3,44 +3,36 @@ import java.util.*;
 // Bogie Class
 class Bogie {
     String id;
+    String type;
     int capacity;
 
-    public Bogie(String id, int capacity) {
+    public Bogie(String id, String type, int capacity) {
         this.id = id;
+        this.type = type;
         this.capacity = capacity;
-    }
-}
-
-// Comparator for sorting by capacity
-class CapacityComparator implements Comparator<Bogie> {
-    public int compare(Bogie b1, Bogie b2) {
-        return b2.capacity - b1.capacity; 
     }
 }
 
 // Train Class
 class Train {
-    HashMap<String, Integer> bogieMap = new HashMap<>();
+    List<Bogie> bogies = new ArrayList<>();
 
-    void addBogie(String id, int capacity) {
-        bogieMap.put(id, capacity);
+    // Add Bogie
+    void addBogie(String id, String type, int capacity) {
+        bogies.add(new Bogie(id, type, capacity));
     }
 
-    void displaySorted() {
-        List<Bogie> list = new ArrayList<>();
+    // Filter High Capacity Bogies using Streams
+    void filterHighCapacity(int minCapacity) {
+        System.out.println("🚆 High Capacity Bogies:");
 
-        // Convert map → list
-        for (Map.Entry<String, Integer> entry : bogieMap.entrySet()) {
-            list.add(new Bogie(entry.getKey(), entry.getValue()));
-        }
-
-        // Sort using Comparator
-        Collections.sort(list, new CapacityComparator());
-
-        System.out.println("🚆 Bogies sorted by capacity (High → Low):");
-        for (Bogie b : list) {
-            System.out.println("ID: " + b.id + ", Capacity: " + b.capacity);
-        }
+        bogies.stream()
+                .filter(b -> b.capacity >= minCapacity)
+                .forEach(b -> System.out.println(
+                        "ID: " + b.id +
+                        ", Type: " + b.type +
+                        ", Capacity: " + b.capacity
+                ));
     }
 }
 
@@ -51,9 +43,9 @@ public class TrainApp {
         Train train = new Train();
 
         while (true) {
-            System.out.println("\n--- UC7 Menu ---");
-            System.out.println("1. Add Bogie");
-            System.out.println("2. Display Sorted Bogies");
+            System.out.println("\n--- UC8 Menu ---");
+            System.out.println("1. Add Passenger Bogie");
+            System.out.println("2. Filter High Capacity Bogies");
             System.out.println("3. Exit");
             System.out.print("Enter choice: ");
 
@@ -62,15 +54,19 @@ public class TrainApp {
 
             switch (ch) {
                 case 1:
-                    System.out.print("Enter Bogie ID: ");
+                    System.out.print("Enter ID: ");
                     String id = sc.nextLine();
+                    System.out.print("Enter Type: ");
+                    String type = sc.nextLine();
                     System.out.print("Enter Capacity: ");
                     int cap = sc.nextInt();
-                    train.addBogie(id, cap);
+                    train.addBogie(id, type, cap);
                     break;
 
                 case 2:
-                    train.displaySorted();
+                    System.out.print("Enter minimum capacity: ");
+                    int min = sc.nextInt();
+                    train.filterHighCapacity(min);
                     break;
 
                 case 3:
