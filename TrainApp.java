@@ -1,10 +1,9 @@
 import java.util.*;
-import java.util.stream.*;
 
 // Bogie Class
 class Bogie {
     String id;
-    String type; 
+    String type;
     int capacity;
 
     public Bogie(String id, String type, int capacity) {
@@ -23,21 +22,13 @@ class Train {
         bogies.add(new Bogie(id, type, capacity));
     }
 
-    // Group by Type
-    void groupByType() {
-        Map<String, List<Bogie>> grouped =
-                bogies.stream()
-                        .collect(Collectors.groupingBy(b -> b.type));
+    // Calculate Total Seats using reduce()
+    void totalCapacity() {
+        int total = bogies.stream()
+                .map(b -> b.capacity)
+                .reduce(0, (sum, cap) -> sum + cap);
 
-        System.out.println("🚆 Bogies Grouped by Type:");
-
-        for (String type : grouped.keySet()) {
-            System.out.println("\nType: " + type);
-            for (Bogie b : grouped.get(type)) {
-                System.out.println("ID: " + b.id +
-                        ", Capacity: " + b.capacity);
-            }
-        }
+        System.out.println("🚆 Total Train Capacity: " + total);
     }
 }
 
@@ -48,9 +39,9 @@ public class TrainApp {
         Train train = new Train();
 
         while (true) {
-            System.out.println("\n--- UC9 Menu ---");
+            System.out.println("\n--- UC10 Menu ---");
             System.out.println("1. Add Bogie");
-            System.out.println("2. Group by Type");
+            System.out.println("2. Total Capacity");
             System.out.println("3. Exit");
             System.out.print("Enter choice: ");
 
@@ -69,7 +60,7 @@ public class TrainApp {
                     break;
 
                 case 2:
-                    train.groupByType();
+                    train.totalCapacity();
                     break;
 
                 case 3:
