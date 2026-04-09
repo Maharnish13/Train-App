@@ -1,34 +1,19 @@
 import java.util.*;
+import java.util.regex.*;
 
-// Bogie Class
-class Bogie {
-    String id;
-    String type;
-    int capacity;
+// Validator Class
+class Validator {
 
-    public Bogie(String id, String type, int capacity) {
-        this.id = id;
-        this.type = type;
-        this.capacity = capacity;
-    }
-}
-
-// Train Class
-class Train {
-    List<Bogie> bogies = new ArrayList<>();
-
-    // Add Bogie
-    void addBogie(String id, String type, int capacity) {
-        bogies.add(new Bogie(id, type, capacity));
+    // Validate Train ID
+    static boolean isValidTrainId(String id) {
+        String pattern = "^TRN-\\d{4}$";
+        return Pattern.matches(pattern, id);
     }
 
-    // Calculate Total Seats using reduce()
-    void totalCapacity() {
-        int total = bogies.stream()
-                .map(b -> b.capacity)
-                .reduce(0, (sum, cap) -> sum + cap);
-
-        System.out.println("🚆 Total Train Capacity: " + total);
+    // Validate Cargo Code
+    static boolean isValidCargoCode(String code) {
+        String pattern = "^CG-[A-Z]{3}$";
+        return Pattern.matches(pattern, code);
     }
 }
 
@@ -36,40 +21,23 @@ class Train {
 public class TrainApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Train train = new Train();
 
-        while (true) {
-            System.out.println("\n--- UC10 Menu ---");
-            System.out.println("1. Add Bogie");
-            System.out.println("2. Total Capacity");
-            System.out.println("3. Exit");
-            System.out.print("Enter choice: ");
+        System.out.print("Enter Train ID: ");
+        String trainId = sc.nextLine();
 
-            int ch = sc.nextInt();
-            sc.nextLine();
+        if (Validator.isValidTrainId(trainId)) {
+            System.out.println("✅ Valid Train ID");
+        } else {
+            System.out.println("❌ Invalid Train ID");
+        }
 
-            switch (ch) {
-                case 1:
-                    System.out.print("Enter ID: ");
-                    String id = sc.nextLine();
-                    System.out.print("Enter Type: ");
-                    String type = sc.nextLine();
-                    System.out.print("Enter Capacity: ");
-                    int cap = sc.nextInt();
-                    train.addBogie(id, type, cap);
-                    break;
+        System.out.print("Enter Cargo Code: ");
+        String cargo = sc.nextLine();
 
-                case 2:
-                    train.totalCapacity();
-                    break;
-
-                case 3:
-                    System.out.println("Exiting...");
-                    return;
-
-                default:
-                    System.out.println("Invalid choice!");
-            }
+        if (Validator.isValidCargoCode(cargo)) {
+            System.out.println("✅ Valid Cargo Code");
+        } else {
+            System.out.println("❌ Invalid Cargo Code");
         }
     }
 }
