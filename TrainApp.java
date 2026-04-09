@@ -1,19 +1,50 @@
 import java.util.*;
-import java.util.regex.*;
+import java.util.stream.*;
 
-// Validator Class
-class Validator {
+// Goods Bogie Class
+class GoodsBogie {
+    String id;
+    String shape;   // Cylindrical / Rectangular
+    String cargo;   // Oil, Gas, Coal, etc.
 
-    // Validate Train ID
-    static boolean isValidTrainId(String id) {
-        String pattern = "^TRN-\\d{4}$";
-        return Pattern.matches(pattern, id);
+    public GoodsBogie(String id, String shape, String cargo) {
+        this.id = id;
+        this.shape = shape;
+        this.cargo = cargo;
+    }
+}
+
+// Train Class
+class Train {
+    List<GoodsBogie> goodsList = new ArrayList<>();
+
+    // Add Goods Bogie
+    void addGoodsBogie(String id, String shape, String cargo) {
+        goodsList.add(new GoodsBogie(id, shape, cargo));
     }
 
-    // Validate Cargo Code
-    static boolean isValidCargoCode(String code) {
-        String pattern = "^CG-[A-Z]{3}$";
-        return Pattern.matches(pattern, code);
+    // Safety Check using Streams
+    void checkSafety() {
+        List<GoodsBogie> unsafe = goodsList.stream()
+                .filter(b ->
+                        (b.shape.equalsIgnoreCase("Cylindrical") &&
+                         !(b.cargo.equalsIgnoreCase("Oil") || b.cargo.equalsIgnoreCase("Gas")))
+                        ||
+                        (b.shape.equalsIgnoreCase("Rectangular") &&
+                         (b.cargo.equalsIgnoreCase("Oil") || b.cargo.equalsIgnoreCase("Gas")))
+                )
+                .collect(Collectors.toList());
+
+        if (unsafe.isEmpty()) {
+            System.out.println("✅ All bogies are SAFE.");
+        } else {
+            System.out.println("❌ Unsafe Bogies Detected:");
+            unsafe.forEach(b -> System.out.println(
+                    "ID: " + b.id +
+                    ", Shape: " + b.shape +
+                    ", Cargo: " + b.cargo
+            ));
+        }
     }
 }
 
@@ -21,23 +52,41 @@ class Validator {
 public class TrainApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Train train = new Train();
 
-        System.out.print("Enter Train ID: ");
-        String trainId = sc.nextLine();
+        while (true) {
+            System.out.println("\n--- UC12 Menu ---");
+            System.out.println("1. Add Goods Bogie");
+            System.out.println("2. Check Safety Compliance");
+            System.out.println("3. Exit");
+            System.out.print("Enter choice: ");
 
-        if (Validator.isValidTrainId(trainId)) {
-            System.out.println("✅ Valid Train ID");
-        } else {
-            System.out.println("❌ Invalid Train ID");
-        }
+            int ch = sc.nextInt();
+            sc.nextLine();
 
-        System.out.print("Enter Cargo Code: ");
-        String cargo = sc.nextLine();
+            switch (ch) {
+                case 1:
+                    System.out.print("Enter ID: ");
+                    String id = sc.nextLine();
+                    System.out.print("Enter Shape (Cylindrical/Rectangular): ");
+                    String shape = sc.nextLine();
+                    System.out.print("Enter Cargo (Oil/Gas/Coal/etc): ");
+                    String cargo = sc.nextLine();
 
-        if (Validator.isValidCargoCode(cargo)) {
-            System.out.println("✅ Valid Cargo Code");
-        } else {
-            System.out.println("❌ Invalid Cargo Code");
+                    train.addGoodsBogie(id, shape, cargo);
+                    break;
+
+                case 2:
+                    train.checkSafety();
+                    break;
+
+                case 3:
+                    System.out.println("Exiting...");
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
         }
     }
 }
