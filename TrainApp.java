@@ -1,10 +1,10 @@
 import java.util.*;
 
-// Train Class using TreeSet
+// Train Class using LinkedHashSet
 class Train {
-    TreeSet<String> bogieIds = new TreeSet<>();
+    LinkedHashSet<String> bogieIds = new LinkedHashSet<>();
 
-    // Add Bogie ID
+    // Add Bogie
     void addBogie(String id) {
         if (!bogieIds.add(id)) {
             System.out.println("❌ Duplicate ID! Not allowed.");
@@ -13,7 +13,7 @@ class Train {
         }
     }
 
-    // Remove Bogie ID
+    // Remove Bogie
     void removeBogie(String id) {
         if (bogieIds.remove(id)) {
             System.out.println("✅ Bogie removed.");
@@ -22,14 +22,14 @@ class Train {
         }
     }
 
-    // Display Sorted Bogies
+    // Display in insertion order
     void displayBogies() {
         if (bogieIds.isEmpty()) {
             System.out.println("No bogies in train!");
             return;
         }
 
-        System.out.println("🚆 Sorted Bogie IDs:");
+        System.out.println("🚆 Bogies in insertion order:");
         for (String id : bogieIds) {
             System.out.println(id);
         }
@@ -43,10 +43,10 @@ public class TrainApp {
         Train train = new Train();
 
         while (true) {
-            System.out.println("\n--- UC4 Menu ---");
-            System.out.println("1. Add Bogie ID");
-            System.out.println("2. Remove Bogie ID");
-            System.out.println("3. Display Sorted Bogies");
+            System.out.println("\n--- UC5 Menu ---");
+            System.out.println("1. Add Bogie");
+            System.out.println("2. Remove Bogie");
+            System.out.println("3. Display Bogies");
             System.out.println("4. Exit");
             System.out.print("Enter choice: ");
 
