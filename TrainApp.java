@@ -1,79 +1,37 @@
 import java.util.*;
 
-// Passenger Bogie Class
-class PassengerBogie {
-    String id;
-    String type;
-    int capacity;
-
-    public PassengerBogie(String id, String type, int capacity) {
-        this.id = id;
-        this.type = type;
-        this.capacity = capacity;
-    }
-
-    void display() {
-        System.out.println("ID: " + id +
-                ", Type: " + type +
-                ", Capacity: " + capacity);
-    }
-}
-
-// Train Class using Set + List
+// Train Class using TreeSet
 class Train {
-    ArrayList<PassengerBogie> bogies = new ArrayList<>();
-    HashSet<String> bogieIds = new HashSet<>();
+    TreeSet<String> bogieIds = new TreeSet<>();
 
-    // Add Bogie 
-    void addBogie(PassengerBogie b) {
-        if (!bogieIds.add(b.id)) { 
-            System.out.println("❌ Duplicate Bogie ID! Not allowed.");
-            return;
-        }
-
-        bogies.add(b);
-        System.out.println("✅ Bogie added successfully!");
-    }
-
-    // Remove Bogie
-    void removeBogie(String id) {
-        boolean found = false;
-
-        Iterator<PassengerBogie> it = bogies.iterator();
-        while (it.hasNext()) {
-            PassengerBogie b = it.next();
-            if (b.id.equals(id)) {
-                it.remove();
-                bogieIds.remove(id);
-                found = true;
-                System.out.println("✅ Bogie removed successfully!");
-                break;
-            }
-        }
-
-        if (!found) {
-            System.out.println("❌ Bogie not found!");
-        }
-    }
-
-    // Check Bogie Exists
-    void checkBogie(String id) {
-        if (bogieIds.contains(id)) {
-            System.out.println("✅ Bogie exists in train.");
+    // Add Bogie ID
+    void addBogie(String id) {
+        if (!bogieIds.add(id)) {
+            System.out.println("❌ Duplicate ID! Not allowed.");
         } else {
-            System.out.println("❌ Bogie does not exist.");
+            System.out.println("✅ Bogie added.");
         }
     }
 
-    // Display All
-    void displayAll() {
-        if (bogies.isEmpty()) {
+    // Remove Bogie ID
+    void removeBogie(String id) {
+        if (bogieIds.remove(id)) {
+            System.out.println("✅ Bogie removed.");
+        } else {
+            System.out.println("❌ Bogie not found.");
+        }
+    }
+
+    // Display Sorted Bogies
+    void displayBogies() {
+        if (bogieIds.isEmpty()) {
             System.out.println("No bogies in train!");
             return;
         }
 
-        for (PassengerBogie b : bogies) {
-            b.display();
+        System.out.println("🚆 Sorted Bogie IDs:");
+        for (String id : bogieIds) {
+            System.out.println(id);
         }
     }
 }
@@ -85,44 +43,32 @@ public class TrainApp {
         Train train = new Train();
 
         while (true) {
-            System.out.println("\n--- UC3 Menu ---");
-            System.out.println("1. Add Bogie");
-            System.out.println("2. Remove Bogie");
-            System.out.println("3. Check Bogie");
-            System.out.println("4. Display All");
-            System.out.println("5. Exit");
+            System.out.println("\n--- UC4 Menu ---");
+            System.out.println("1. Add Bogie ID");
+            System.out.println("2. Remove Bogie ID");
+            System.out.println("3. Display Sorted Bogies");
+            System.out.println("4. Exit");
             System.out.print("Enter choice: ");
 
             int ch = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine();
 
             switch (ch) {
                 case 1:
-                    System.out.print("Enter ID: ");
-                    String id = sc.nextLine();
-                    System.out.print("Enter Type: ");
-                    String type = sc.nextLine();
-                    System.out.print("Enter Capacity: ");
-                    int cap = sc.nextInt();
-
-                    train.addBogie(new PassengerBogie(id, type, cap));
+                    System.out.print("Enter Bogie ID: ");
+                    train.addBogie(sc.nextLine());
                     break;
 
                 case 2:
-                    System.out.print("Enter ID to remove: ");
+                    System.out.print("Enter Bogie ID: ");
                     train.removeBogie(sc.nextLine());
                     break;
 
                 case 3:
-                    System.out.print("Enter ID to check: ");
-                    train.checkBogie(sc.nextLine());
+                    train.displayBogies();
                     break;
 
                 case 4:
-                    train.displayAll();
-                    break;
-
-                case 5:
                     System.out.println("Exiting...");
                     return;
 
